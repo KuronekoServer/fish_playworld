@@ -1,0 +1,299 @@
+<html>
+   <head>
+      <title>
+         シューティングにする予定
+      </title>
+      <style>
+         .c{
+            border:solid 5px #cccc;
+            position:absolute;
+            top:5px;
+            left:5px;
+         }
+      </style>
+   </head>
+   <body>
+      <canvas id="ca2" class="c" width="700px" height="700px"></canvas>
+      <canvas id="ca1" class="c" width="700px" height="700px"></canvas>
+      <canvas id="ca" class="c" width="700px" height="700px"></canvas>
+      <script>
+         const ca = document.getElementById('ca');
+               const ctx = ca.getContext('2d');
+         const ca1 = document.getElementById('ca1');
+               const gtx = ca1.getContext('2d');
+         const ca2 = document.getElementById('ca2');
+               const rtx = ca2.getContext('2d');
+         var x = []
+         var y = []
+         var box_size = 10;
+         var player_x = 0
+         var player_y = 660
+         var player_x_tag_a = 0;
+         var player_x_tag_d = 0;
+         var player_speeds_x = 1;
+         var player_speeds_y = 1;
+         var player_box_size = 40
+         var length = 0;
+         var enemy_x = 800;
+         var enemy_y = 100;
+         var enemy_x_c = ""
+         var enemy_y_c = ""
+         var enemy_box_size = 50;
+         var game = 0
+         var sukoa = 0
+         var c1 = document.getElementById('ca');
+         var interval = 0
+         var hits = 0
+         document.addEventListener('keydown', (e) => {
+            if(e.code === "KeyD")
+            {
+               player_x_tag_d = 1
+            }
+            if(e.code === "KeyA")
+            {
+               player_x_tag_a = 1
+            }
+         })
+         document.addEventListener('keyup', (e) => {
+            if(e.code === "KeyD")
+            {
+               player_x_tag_d = 2
+            }
+            if(e.code === "KeyA")
+            {
+               player_x_tag_a = 2
+            }
+            if(e.code === "Space")
+            {
+               if(x.length < 5)
+            {
+               x[x.length] = player_x+player_box_size/2-box_size/2;
+               y[y.length] = player_y-box_size*2;
+               length++
+            }
+            }
+         })
+         c1.onclick=function(event){
+            
+         };
+         function bakuhatu()
+            {
+            }
+         function load()
+         {
+            var img_bakuhatu = new Image()
+         img_bakuhatu.src = './img/bakuhatu.png';
+         img_bakuhatu.onload = function(){
+           rtx.drawImage(img_bakuhatu,enemy_x_c,enemy_y_c,enemy_box_size+25,enemy_box_size)
+         }
+            enemy_x_c = enemy_x-box_size/2
+            enemy_y_c = enemy_y
+            gtx.clearRect(enemy_x-1,enemy_y-1,enemy_box_size+2,enemy_box_size+2)
+            enemy_x=Math.floor(Math.random()*650)+1
+            enemy_y=0
+            sukoa++
+         }load()
+         function show()
+         {
+            var img_enemy = new Image()
+         img_enemy.src = './img/enemy.png';
+         img_enemy.onload = function(){
+           gtx.clearRect(enemy_x,enemy_y-10,enemy_box_size,10)
+           gtx.drawImage(img_enemy,enemy_x,enemy_y,enemy_box_size,enemy_box_size)
+           enemy_y+=0.8
+         }
+            ctx.fillStyle= "#00ff90";
+            ctx.fillRect(player_x,player_y,player_box_size,player_box_size)
+            ctx.clearRect(player_x-player_speeds_x-10,player_y-player_speeds_y-10,player_box_size+(player_speeds_x+10)*2,player_speeds_y+10) //上
+            ctx.clearRect(player_x-player_speeds_x-10,player_y+player_box_size+player_speeds_y+10,player_box_size+(player_speeds_x+10)*2,-player_speeds_y-10)//下
+            ctx.clearRect(player_x+player_box_size+player_speeds_x+10,player_y-player_speeds_y-10,-player_speeds_x-10,player_box_size+(player_speeds_y+10)*2)//右
+            ctx.clearRect(player_x-player_speeds_x-10,player_y-player_speeds_y-10,player_speeds_x+10,player_box_size+(player_speeds_y+10)*2) //左
+            if(player_x_tag_a === 1)
+            {
+              player_x-=player_speeds_x
+            }else if(player_x_tag_a === 2)
+            {
+               if(player_speeds_x > 0)
+               {
+               player_x-=player_speeds_x
+               player_speeds_x-=0.05
+               }else
+               {
+                  player_speeds_x=1
+                  player_x_tag_a=0
+               }
+            }
+            if(player_x_tag_d === 1)
+            {
+              player_x+=player_speeds_x
+            }else if(player_x_tag_d === 2)
+            {
+               if(player_speeds_x > 0)
+               {
+               player_x+=player_speeds_x
+               player_speeds_x-=0.05
+               }else
+               {
+                  player_speeds_x=1
+                  player_x_tag_d=0
+               }
+            }
+            /*上playerの処理*/
+            /*下たまの処理*/
+            ctx.fillRect(x[0],y[0],10,10)
+               ctx.clearRect(x[0]-box_size,y[0],10,10)
+               ctx.clearRect(x[0]-box_size,y[0]+box_size,10*4,10)
+            ctx.fillRect(x[1],y[1],10,10)
+               ctx.clearRect(x[1]-box_size,y[1],10,10)
+               ctx.clearRect(x[1]-box_size,y[1]+box_size,10*4,10)
+            ctx.fillRect(x[2],y[2],10,10)
+               ctx.clearRect(x[2]-box_size,y[2],10,10)
+               ctx.clearRect(x[2]-box_size,y[2]+box_size,10*4,10)
+            ctx.fillRect(x[3],y[3],10,10)
+               ctx.clearRect(x[3]-box_size,y[3],10,10)
+               ctx.clearRect(x[3]-box_size,y[3]+box_size,10*4,10)
+            ctx.fillRect(x[4],y[4],10,10)
+               ctx.clearRect(x[4]-box_size,y[4],10,10)
+               ctx.clearRect(x[4]-box_size,y[4]+box_size,10*4,10)
+            y = y.map(function(a){
+               return a-=1
+            });
+            if(y[0]+box_size < 0)
+            {
+               x.splice(0,1);
+               y.splice(0,1);
+               length--
+            }
+            /*上は天井の処理*/
+            /*下は敵に当たった時の処理*/
+            if(enemy_x < x[0] && enemy_x+enemy_box_size > x[0] && enemy_y+enemy_box_size > y[0] && enemy_y < y[0])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[0],y[0],11,11)
+               x.splice(0,1);
+               y.splice(0,1);
+               length--
+               interval = 200
+               hits = 1
+            }else if(enemy_x < x[0]+box_size && enemy_x+enemy_box_size > x[0] && enemy_y+enemy_box_size > y[0] && enemy_y < y[0])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[0],y[0],11,11)
+               x.splice(0,1);
+               y.splice(0,1);
+               length--
+               interval = 200
+               hits = 1
+            }
+            if(enemy_x < x[1] && enemy_x+enemy_box_size > x[1] && enemy_y+enemy_box_size > y[1] && enemy_y < y[1])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[1],y[1],11,11)
+               x.splice(1,1);
+               y.splice(1,1);
+               length--
+               interval = 200
+               hits = 1
+            }else if(enemy_x < x[1]+box_size && enemy_x+enemy_box_size > x[1] && enemy_y+enemy_box_size > y[1] && enemy_y < y[1])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[1],y[1],11,11)
+               x.splice(1,1);
+               y.splice(1,1);
+               length--
+               interval = 200
+               hits = 1
+            }
+            if(enemy_x < x[2] && enemy_x+enemy_box_size > x[2] && enemy_y+enemy_box_size > y[2] && enemy_y < y[2])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[2],y[2],11,11)
+               x.splice(2,1);
+               y.splice(2,1);
+               length--
+               interval = 200
+               hits = 1
+            }else if(enemy_x < x[2]+box_size && enemy_x+enemy_box_size > x[2] && enemy_y+enemy_box_size > y[2] && enemy_y < y[2])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[2],y[2],11,11)
+               x.splice(2,1);
+               y.splice(2,1);
+               length--
+               interval = 200
+               hits = 1
+            }
+            if(enemy_x < x[3] && enemy_x+enemy_box_size > x[3] && enemy_y+enemy_box_size > y[3] && enemy_y < y[3])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[3],y[3],11,11)
+               x.splice(3,1);
+               y.splice(3,1);
+               length--
+            }else if(enemy_x < x[3]+box_size && enemy_x+enemy_box_size > x[3] && enemy_y+enemy_box_size > y[3] && enemy_y < y[3])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[3],y[3],11,11)
+               x.splice(3,1);
+               y.splice(3,1);
+               length--
+               interval = 200
+               hits = 1
+            }
+            if(enemy_x < x[4] && enemy_x+enemy_box_size > x[4] && enemy_y+enemy_box_size > y[4] && enemy_y < y[4])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[4],y[4],11,11)
+               x.splice(4,1);
+               y.splice(4,1);
+               length--
+               interval = 200
+               hits = 1
+            }else if(enemy_x < x[4]+box_size && enemy_x+enemy_box_size > x[4] && enemy_y+enemy_box_size > y[4] && enemy_y < y[4])
+            {
+               console.log("HIT")
+               load()
+               ctx.clearRect(x[4],y[4],11,11)
+               x.splice(4,1);
+               y.splice(4,1);
+               length--
+               interval = 200
+               hits = 1
+            }
+            /*敵側の処理*/
+            if(enemy_y+enemy_box_size > 700)
+            {
+               if(game === 0)
+               {
+               alert("gameover")
+               alert("スコアは..."+sukoa+"点です！")
+               game = 1
+               }else if(game === 1)
+               {
+               }
+            }
+            if(interval > 0)
+            {
+               interval--
+            }else{
+               interval = 0
+            }
+            if(interval === 0 && hits > 0)
+            {
+               rtx.clearRect(0,0,100000,100000)
+               hits = 0
+            }
+         }setInterval("show()",1)
+         alert("ready?")
+      </script>
+   </body>
+</html>

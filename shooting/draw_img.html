@@ -1,0 +1,19 @@
+   <html>
+   <head>
+   </head>
+   <body>
+      <canvas id="ca" class="c" width="1000px" height="600px"></canvas>
+      <script>
+         const ca = document.getElementById('ca');
+               const ctx = ca.getContext('2d');
+         function load()
+         {
+         var imgg = new Image()
+         imgg.src = './img/enemy.png';
+         imgg.onload = function(){
+            ctx.drawImage(imgg,0,0,400,400)
+         }
+         }
+      </script>
+   </body>
+</html>
